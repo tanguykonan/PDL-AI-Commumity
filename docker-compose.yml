@@ -1,0 +1,55 @@
+services:
+
+  youtube-cipher:
+    image: ghcr.io/kikkia/yt-cipher:master
+    container_name: youtube-cipher
+    restart: unless-stopped
+    mem_limit: 3G
+    cpus: 2
+    environment:
+      - PASSWORD=${LAVALINK_PASS}
+    networks:
+      - internal
+
+  lavalink-node:
+    image: ghcr.io/lavalink-devs/lavalink:latest
+    container_name: lavalink-node
+    restart: unless-stopped
+    mem_limit: 6G
+    cpus: 2
+    environment:
+      - LAVALINK_PASS=${LAVALINK_PASS}
+    depends_on:
+      - youtube-cipher
+    networks:
+      - internal
+    volumes:
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml
+
+  pdl-ai:
+    build: .
+    image: pdl-ai:latest
+    container_name: pdl-ai
+    restart: unless-stopped
+    mem_limit: 12G
+    cpus: 2.5
+    depends_on:
+      - youtube-cipher
+      - lavalink-node
+    networks:
+      - internal
+    ports:
+      - "7088:7088"
+    volumes:
+     - pdl_rom:/app/PDL-AI/app/cluster/rom
+     - pdl_debug:/app/PDL-AI/debug/
+
+volumes:
+  pdl_rom:
+    external: true
+  pdl_debug:
+    external: true
+
+networks:
+  internal:
+    driver: bridge

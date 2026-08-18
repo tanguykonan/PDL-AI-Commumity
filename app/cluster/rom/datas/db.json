@@ -1,0 +1,34 @@
+{
+    "bot": {
+        "admins": [
+            1233020939898327092,
+            767678057770385438
+        ],
+        "activities": [],
+        "stats": {
+            "userNumber": 8608,
+            "serverNumber": 7,
+            "queryNumber": 5616,
+            "usersInMemory": 1,
+            "serversTracked": 1,
+            "totalMessages": 2,
+            "totalServerMessages": 1
+        }
+    },
+    "users": {},
+    "servers": {
+        "1460035966931570886": {
+            "isBanned": false,
+            "isPremium": true,
+            "config": {
+                "language": "fr",
+                "mode": "support",
+                "alertChannel": null,
+                "autoSanction": "Aucune sanction"
+            },
+            "authorizedChannels": [
+                "1460080960614826105"
+            ]
+        }
+    }
+}

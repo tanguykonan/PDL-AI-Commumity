@@ -1,0 +1,51 @@
+# Git & CI/CD
+.git/
+.github/
+.gitlab-ci.yml
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose*.yml
+README.md
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment & Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Python Bytecode & Cache
+__pycache__/
+**/*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & Temporary Files
+debug/*.log
+*.log
+app/cluster/ram/temp/*
+!app/cluster/ram/temp/.gitkeep
+app/cluster/rom/datas/*.backup_*
+
+# Testing & Scratch
+testing/
+test.py
+tests/
+scratch/

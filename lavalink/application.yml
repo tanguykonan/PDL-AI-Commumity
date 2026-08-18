@@ -1,0 +1,47 @@
+server:
+  port: 2333
+  address: 0.0.0.0
+
+lavalink:
+  plugins:
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.18.0"
+      repository: "https://maven.lavalink.dev/releases"
+      snapshot: false
+
+  server:
+    password: ${LAVALINK_PASS}
+    timeouts:
+      connectTimeoutMs: 20000
+      connectionRequestTimeoutMs: 20000
+      socketTimeoutMs: 20000
+    sources:
+      youtube: false
+      soundcloud: true
+      bandcamp: false
+      twitch: false
+      vimeo: false
+      http: true
+      local: false
+
+plugins:
+  youtube:
+    enabled: true
+    allowSearch: true
+    allowDirectVideoIds: true
+    allowDirectPlaylistIds: true
+    remoteCipher:
+      url: "http://youtube-cipher:8001"
+      password: ${LAVALINK_PASS}
+    clients:
+      - M_WEB
+      - WEB
+      - MUSIC
+      - WEBEMBEDDED
+      - ANDROID_VR
+      - TV
+      - TVHTML5EMBEDDED
+
+logging:
+  level:
+    root: INFO
+    lavalink: INFO
