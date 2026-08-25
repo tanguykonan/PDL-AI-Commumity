@@ -1,6 +1,6 @@
-# Base de Connaissances & Tutoriels du Serveur
+# Base de Connaissances & Tutoriels du Serveur (Exemple)
 
-Ce fichier Markdown sert de base de connaissances pour le moteur RAG vectoriel (TSE) du bot.
+Ce fichier Markdown sert de modèle de base de connaissances pour le moteur RAG vectoriel (TSE) du bot.
 Vous pouvez ajouter autant de sections, tutoriels, guides ou FAQ que vous le souhaitez ci-dessous.
 ChromaDB découpera et indexera automatiquement ce texte en vecteurs pour répondre précisément aux questions des membres.
 

@@ -13,7 +13,6 @@ except Exception as error:
 with open("settings/resources/strings/prompts.toml", "rb") as file:
     _PROMPT = tomli.load(file)
 
-
 # Discord bot configuration
 NAME = os.getenv("NAME")
 PREFIX = os.getenv("PREFIX")

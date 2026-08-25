@@ -6,7 +6,6 @@ from typing import Optional, Dict, List
 from app.helps.utils import logger
 from settings.config import params
 
-
 class InternalSearchEngine:
     """Manages local server-level JSONL log files for contextual search."""
 

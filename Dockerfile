@@ -1,5 +1,4 @@
 FROM python:3.11-slim-bookworm
-LABEL authors="NYTHIQUE"
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
@@ -11,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app/PDL-AI
 
-COPY requirements-prod.txt .
-RUN pip install --no-cache-dir -r requirements-prod.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 

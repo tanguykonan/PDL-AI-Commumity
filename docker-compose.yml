@@ -33,22 +33,20 @@ services:
     restart: unless-stopped
     mem_limit: 12G
     cpus: 2.5
+    env_file:
+      - .env
     depends_on:
       - youtube-cipher
       - lavalink-node
     networks:
       - internal
-    ports:
-      - "7088:7088"
     volumes:
-     - pdl_rom:/app/PDL-AI/app/cluster/rom
-     - pdl_debug:/app/PDL-AI/debug/
+      - pdl_rom:/app/PDL-AI/app/cluster/rom
+      - pdl_debug:/app/PDL-AI/debug/
 
 volumes:
   pdl_rom:
-    external: true
   pdl_debug:
-    external: true
 
 networks:
   internal:

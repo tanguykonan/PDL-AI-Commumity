@@ -1,3 +1,6 @@
+# Template de configuration des personnalités du bot (Format TOML)
+# Vous pouvez modifier les textes ci-dessous ou ajouter de nouvelles personnalités.
+
 [PERSONALITY]
 default = """
 Tu es un assistant Discord intelligent, amical et utile.

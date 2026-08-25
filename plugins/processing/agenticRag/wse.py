@@ -1,20 +1,17 @@
-# ==================================================================================
-# ============================ MODULE WSE - WEB SEARCH ENGINE ======================
-# ==================================================================================
-# Auteur: @NYTHIQUE
-# GitHub: https://github.com/Nythique
-# Portfolio: https://nythique.github.io
-# Date de création: 02/04/2026
-# ==================================================================================
+"""Web Search Engine (WSE): Real-time web querying via Tavily API."""
+
+from tavily import AsyncTavilyClient
 from app.helps.utils import logger
 from settings.config import params
-from tavily import AsyncTavilyClient
+
 
 class ErrorMessage:
     silent_bug = ""
-    search_failed = "[ÉTAT DE LA RECHERCHE INTERNET: La recherche internet a échoué, réponds avec tes connaissances générales]"
+    search_failed = "[WEB SEARCH STATUS: Internet search failed, answer using general knowledge.]"
+
 
 class WebSearchEngine(ErrorMessage):
+    """Asynchronous internet search engine powered by Tavily."""
 
     def __init__(self):
         self.client = AsyncTavilyClient(api_key=params.TAVILY_TOKEN)
@@ -30,9 +27,8 @@ class WebSearchEngine(ErrorMessage):
         self.tavily_time_range = params.TAVILY_TIME_RANGE
         self.tavily_relevance_score = params.TAVILY_RELEVANCE_SCORE
 
-
     async def search(self, query: str) -> str:
-
+        """Perform search query and format result snippet for LLM context."""
         if not query or not isinstance(query, str):
             return ErrorMessage.silent_bug
 
@@ -42,7 +38,6 @@ class WebSearchEngine(ErrorMessage):
             return ErrorMessage.silent_bug
 
         try:
-
             data = await self.client.search(
                 query=query,
                 topic=self.tavily_topic[0],
@@ -53,59 +48,50 @@ class WebSearchEngine(ErrorMessage):
                 include_raw_content=self.tavily_include_raw_content,
                 include_domains=self.tavily_include_domains,
                 exclude_domains=self.tavily_exclude_domains,
-
             )
 
             return self._format_results(data)
 
         except Exception as err:
-            logger.error(f"[ERROR WSE]=> Une erreur inattendue s'est produite: {err}", exc_info=True)
+            logger.error(f"[ERROR WSE] Web search failed: {err}", exc_info=True)
             return ErrorMessage.search_failed
 
     def _format_results(self, data: dict) -> str:
-
+        """Format raw search payload into structured text block."""
         if not data or not isinstance(data, dict):
             return ErrorMessage.silent_bug
 
-        prompt_context  = []
+        prompt_context = []
 
-        # ── Résumé géneré par tavily ──────────────────────────────────────────────
+        # Tavily AI summary
         tavily_answer = data.get("answer", "").strip()
         if tavily_answer:
-            prompt_context.append(f"* Résumé=> {tavily_answer}")
+            prompt_context.append(f"* Summary=> {tavily_answer}")
 
-        # ── Liste des résultats (toutes les sources) web retournés par Tavily ───────
+        # List of web sources
         search_results = data.get("results", [])
         if not search_results:
             return ErrorMessage.silent_bug
 
-        # ── Sélection et formatage des résultats de chaque source (page) ──────────────────────
         formatted_sources = []
-        for index, source in enumerate(search_results[:self.tavily_max_search_results], start=1):
-
+        for index, source in enumerate(search_results[: self.tavily_max_search_results], start=1):
             relevance_score = source.get("score", 0)
             if relevance_score < self.tavily_relevance_score[6]:
                 continue
 
-            page_title = source.get("title", "Sans titre").strip()
+            page_title = source.get("title", "Untitled").strip()
             page_content = source.get("content", "").strip()
 
             if len(page_content) > self.tavily_max_text_length:
-                page_content = page_content[:self.tavily_max_text_length] + "..."
+                page_content = page_content[: self.tavily_max_text_length] + "..."
 
             if page_content:
-                formatted_sources.append(
-                    f"[{index}] {page_title}\n"
-                    f"    {page_content}\n"
-                )
+                formatted_sources.append(f"[{index}] {page_title}\n    {page_content}\n")
 
-        # ── Sélection et formatage des résultats de chaque source (page) ──────────────────────
         if formatted_sources:
-            prompt_context.append("* Détails=>\n" + "\n".join(formatted_sources))
+            prompt_context.append("* Details=>\n" + "\n".join(formatted_sources))
 
-        # ── Résultats ─────────────────────────────────────────────────────────
         if not prompt_context:
             return ErrorMessage.silent_bug
 
         return "\n".join(prompt_context)
-
